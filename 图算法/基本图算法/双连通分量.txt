@@ -1,0 +1,73 @@
+1 无向连通图的双连通分量：
+  割点(衔接点)：
+		割点的充要条件：在搜索过程中，对于边(u, v),如果u为树根，
+		     则若u有至少两个的儿子节点，则u为割点；
+			 若u为非根节点，v是u的后代节点，如果dfn[u] <= low[v],则u为割点。
+			
+  桥：
+		对于边(u, v), 如果dfn[u] < low[v], 则(u, v)为桥 (不能取等号)
+		
+2 代码
+
+求点双连通图
+stack<int> s; 
+int num=1,time=0;
+int id[1000]={0}; 
+
+void tarjan(int x, int fa)
+{
+    dfn[x]=low[x]=time++; 
+    for(int e=first[x];e!=-1;e=next[e])
+    { 
+        if(x!=fa&&dfn[x]<dfn[v[e]])
+        {
+            s.push(e); 
+            
+            if(dfn[x]==0)
+            {
+                  tarjan(v[e], x);
+                  if(low[v[e]]<low[x])   low[x]=low[v[e]]; 
+                  if(low[v[e]]>=dfn[x])  //如果是根节点还需要另外判断
+                  { 
+                      int edge; 
+                      do
+                      { 
+                          s.pop();
+                          edge=s.top();
+                          id[u[edge]]=id[v[edge]]=num++;
+                      }while(u[edge]!=x||v[edge]!=v[e]);
+                  }
+            } 
+            else if(dfn[v[e]]<low[x]) low[x]=dfn[v[e]]; 
+        }
+    }
+}
+
+求边双连通图
+void(int u,int fa)
+{ 
+    dfn[u]=low[u]=++time;
+    s[top++]=u; 
+    
+    for(int e=first[u];e!=-1;e=next[e]) 
+    {
+        if(v[e]!=fa)
+        { 
+            if(!dfn[v[e]])
+            {
+                tarjan(v[e],u); 
+                
+                if(low[v[e]]<low[u])  low[u]=low[v[e]]; 
+                else if(low[v[e]]>dfn[u])
+                { 
+                    for(s[top]=-1;s[top]!=v[e];)
+                    {
+                        id[s[--top]]=num;
+                        num++;
+                    }
+                }
+            } 
+            else if(dfn[v[e]]<low[u])  low[u]=dfn[v[e]];
+        }
+    }
+}

@@ -1,0 +1,40 @@
+1、Kosaraju算法
+
+2、Tarjan算法
+tarjan(u)
+{
+	DFN[u]=Low[u]=++Index                      // 为节点u设定次序编号和Low初值
+	Stack.push(u)                              // 将节点u压入栈中
+	for each (u, v) in E                       // 枚举每一条边
+		if (v is not visted)               // 如果节点v未被访问过
+			tarjan(v)                  // 继续向下找
+			Low[u] = min(Low[u], Low[v])
+		else if (v in S)                   // 如果节点v还在栈内
+			Low[u] = min(Low[u], DFN[v])
+	if (DFN[u] == Low[u])                      // 如果节点u是强连通分量的根
+		repeat
+			v = S.pop                  // 将v退栈，为该强连通分量中一个顶点
+			print v
+		until (u== v)
+} 
+
+3、Garbow算法  
+
+相比tarjin算法 降低了常数因子
+
+GABOW(u):
+visit[u] <- time
+time <- time + 1
+push(S, u)
+push(P, u)
+
+for each edge (u, i) in the graph:
+    if visit[i] is not defined:
+        GABOW(i)
+    else if i is in S:
+        repeat popping nodes on P until visit[top(P)] <= visit[i]
+
+// things popped here are in the same SCC
+if top(P) == u:
+    pop all node above u on S including u
+    pop u from P

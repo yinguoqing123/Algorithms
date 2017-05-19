@@ -1,0 +1,62 @@
+不想写了  太麻烦了
+
+初始化
+initialize-single-souce(G,s)
+{
+for each vertex 属于G.E
+	v.d=无穷;
+	v.p=NIL;
+s.d=0;
+}
+
+松弛操作
+relax(u,v,w)
+{
+	if v.d>u.d+w
+		v.d=u.d+w;
+		v.p=u;
+}
+
+
+单源节点对的最短路径
+1 Bellman-Ford算法  可以包含权重为负值的环路
+  时间复杂度 O(VE)
+Bellman-Ford(G,w,s)
+{
+	initialize-single-souce(G,s);
+	for i=1 to V-1
+		for each vedge (u,v,w) 属于G.E
+			relax(u,v,w);
+	for each vedge(u,v) 属于G.E
+		if u.d>v.d+w
+			return false;
+	return ture;	
+} 
+
+
+2 有向无环图
+时间复杂度O(V+E)
+DAG-Shortest-Path(G,w,s)
+{
+	拓扑排序  从左指向右
+	initialize-single-souce(G,s);
+	for each vertex u,taken in topologically sorted orde
+		for each edge v 属于adj[u]
+			relax(u,v,w);
+}
+
+3 Dijkstra算法  所有权重为非负值
+若使用斐波那契堆 时间复杂度为O(VlgV+E)
+Dijkstra(G,w,s)
+{
+	initialize-single-souce(G,s);
+	S=空;
+	Q=G.V;
+	while(Q!=空)
+	{
+		u=Extract-Min(Q);
+		S={S}U{u};
+		for each vertex v 属于adj[u]
+			relax(u,v,w);
+	}
+}

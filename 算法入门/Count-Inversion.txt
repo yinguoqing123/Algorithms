@@ -1,0 +1,43 @@
+计算逆序对伪码
+Count-Inversion(A,p,r)
+{
+	inversions=0;
+	if(p<r)
+	{
+		q=(p+r)/2;(向下取整)
+		inversions=inversions+Count-Inversion(A,p,q);
+		inversions=inversions+Count-Inversion(A,q+1,r);
+		inversions=inversions+Merge-Inversion(A,p,r);
+	}
+	return inversions;
+}
+Merge-Inversion(A,p,q,r)
+{
+	n1=q-p+1;
+	n2=r-q;
+	Let L[1,2,..,n1+1] and R[1,2,..,n2+1] be new arrays
+	for i=1 to n1
+		L[i]=A[p+i-1];
+	for j=1 to n2
+		R[j]=A[q+j]
+	L[n1+1]=无穷大
+	R[n2+1]=无穷大
+	i=1
+	j=1
+	inversions=0
+	counted=FALSE
+	for k=p to r
+	{
+		if counted==FALSE and R[j]<L[i]
+			inversions=inversions+n1-i+1
+			counted=TRUE
+		if L[i]<=R[j]
+			A[k]=L[i]
+			i=i+1
+		else
+			A[k]=R[j]
+			j=j+1
+		counted=FALSE
+	}
+	return inversions	
+}
